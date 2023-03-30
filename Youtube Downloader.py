@@ -10,10 +10,27 @@ def Download_Video():
     link = input("What is the url?\n")
     youtubeObject = YouTube(link)
     youtubeObject = youtubeObject.streams.get_highest_resolution()
+
+    custom_name_input = input("Enter Custom Title of Video or Leave Blank for original title")
+
+    if custom_name_input is not None:
+        custom_name = True
+        filename = custom_name_input + '.mp4'
+    else:
+        custom_name = False
+
+    current_directory = os.getcwd()
+
+    filepath = os.path.join(current_directory,filename)
+
     print("Downloading " + youtubeObject.title + "\n\n")
     try:
-        youtubeObject.download()
-        print(youtubeObject.title + " Download is completed successfully")
+        if custom_name:
+            youtubeObject.download(output_path=current_directory,filename=filename)
+            print(youtubeObject.title + " Download is completed successfully")
+        else:
+            youtubeObject.download()
+            print(youtubeObject.title + " Download is completed successfully")
     except:
         print("An error has occurred")
 
