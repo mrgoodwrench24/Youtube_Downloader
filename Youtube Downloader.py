@@ -12,23 +12,21 @@ def Download_Video():
     if type == '1':
         file_extension = '.mp4'
         youtubeObject = YouTube(link)
-        youtubeObject = youtubeObject.streams.filter(only_audio=True).get_highest_resolution()
+        youtubeObject = youtubeObject.streams.get_highest_resolution()
     elif type == '2':
         file_extension = '.mp3'
         youtubeObject = YouTube(link)
-        youtubeObject = youtubeObject.streams.get_highest_resolution()
+        youtubeObject = youtubeObject.streams.filter(only_audio=True).get_audio_only()
     else:
-        type = input("Invalid response.  Type 1 for Video and Type 2 for Music")
-
-
+        print("Invalid response.  Type 1 for Video and Type 2 for Music")
 
     custom_name_input = input("Enter File Name:\n")
     filename = custom_name_input + file_extension
 
     current_directory = os.getcwd()
 
-    print("Downloading " + youtubeObject.title + "\n\n")
     try:
+        print("Downloading " + youtubeObject.title + "\n\n")
         youtubeObject.download(output_path=current_directory,filename=filename)
         print(filename + " Download is completed successfully")
     except:
@@ -36,18 +34,7 @@ def Download_Video():
 
 
 def Download_Playlist():
-    music = False
-    current_directory = os.getcwd()
-
     link = input("What is the playlist url?\n")
-    type = input("Type 1 for Video and Type 2 for music\n")
-    if type == '2':
-        music = True
-        file_extension = ('.mp4')
-    else:
-        music = False
-        file_extension = ('.mp3')
-
     p = Playlist(link)
     for link in p.video_urls:
         try:
@@ -57,14 +44,8 @@ def Download_Playlist():
         except Exception as e:
             print(f"An error occurred: {e}")
         else:
-            if music == False:
-                video.streams.get_highest_resolution().download(output_path=current_directory, filename=str(video.title) + file_extension)
-                print(file_extension + " Download is completed successfully")
-            else:
-
-                video.streams.filter(only_audio=True).get_highest_resolution()
-                video.download(output_path=current_directory, filename=str(video.title) + file_extension)
-                print(file_extension + " Download is completed successfully")
+            video.streams.get_highest_resolution().download()
+            print(video.title + " Download is completed successfully")
 
 
 while choice != "q":
