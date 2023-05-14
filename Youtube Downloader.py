@@ -33,7 +33,7 @@ def download_video():
         print("An error has occurred")
 
 
-def download_playlist():
+def Download_Playlist():
     link = input("What is the playlist url?\n")
     p = Playlist(link)
     for link in p.video_urls:
@@ -43,9 +43,18 @@ def download_playlist():
             print(f'Video {link} is unavaialable, skipping.')
         except Exception as e:
             print(f"An error occurred: {e}")
+
         else:
-            video.streams.get_highest_resolution().download()
-            print(video.title + " Download is completed successfully")
+            try:
+                video.streams.get_highest_resolution().download()
+                print(video.title + " Download is completed successfully")
+            except pytube.exceptions / PytubeError as b:
+                print(f"Error downloading {video.title}: {b}")
+                continue
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                continue
+
 
 while choice != "q":
     choice = input("Youtube Downloader\nWelcome!  Choose a number then hit enter\n1. Download Single Youtube video\n2. Download Playlist\n q to quit\n")
