@@ -1,7 +1,9 @@
 import sys
 import os
+
+import pytube
 from pytube import Playlist, YouTube
-from pytube.exceptions import VideoUnavailable
+from pytube.exceptions import VideoUnavailable, PytubeError
 
 choice = "0"
 
@@ -33,7 +35,7 @@ def download_video():
         print("An error has occurred")
 
 
-def Download_Playlist():
+def download_playlist():
     link = input("What is the playlist url?\n")
     p = Playlist(link)
     for link in p.video_urls:
@@ -43,7 +45,6 @@ def Download_Playlist():
             print(f'Video {link} is unavaialable, skipping.')
         except Exception as e:
             print(f"An error occurred: {e}")
-
         else:
             try:
                 video.streams.get_highest_resolution().download()
